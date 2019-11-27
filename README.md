@@ -9,9 +9,9 @@ Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs
 * [ ] More pretrained models (ours / other open source projects)
 
 ## Key contributions
-* ACS convolution aims at a generic and plug-and-play replacement of standard 3D convolution, for 3D medical images.
-* ACS convolution enables 2D-to-3D transfer learning, which consistently provides significant performance boost in our experiments.
-* Even without pretraining, ACS convolution is comparable to or even better than 3D convolution, with smaller model size and less computation.
+* ACS convolution aims at a **plug-and-play replacement** of standard 3D convolution, for 3D medical images.
+* ACS convolution enables **2D-to-3D transfer learning**, which consistently provides significant performance boost in our experiments.
+* Even without pretraining, ACS convolution is **comparable to or even better than** 3D convolution, with **smaller model size** and **less computation**.
 
 
 ## Code structure
