@@ -19,7 +19,7 @@ Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs
 * ``experiment_lib``: the lib for running the experiments.
 * ``poc_experiments``: the scripts to run proof-of-concept experiments.
 
-## How to use the 2D-to-3D/ACS model converter
+## Convert a 2D model into 3D with a single line of code
 ```python
 from torchvision.models import resnet18
 from acsconv.converters import ACSConverter
