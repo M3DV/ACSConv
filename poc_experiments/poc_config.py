@@ -5,7 +5,7 @@ import sys
 class POCVoxelEnv():
     data_test = '../data/poc/voxel/test'
     data_train = '../data/poc/voxel/train'
-    shape_checkpoint = '/home/hxy/Code/code/tmp/poc/noise0.5/shape/191123_011856_10000samples/model.dat' # put the 2D model checkpoint here.
+    shape_checkpoint = '<<The 2D UNet model checkpoint>>' # put the 2D model checkpoint here.
 
 class POCShapeEnv():
     data_test = '../data/poc/shape/test'
