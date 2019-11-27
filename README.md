@@ -1,7 +1,14 @@
 # ACSConv
 Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs/1911.10477))
 
-**[WIP] Full code is coming soon (around mid December), stay tuned!**
+**[WIP] More code is coming soon (around mid December), stay tuned!**
+* [ ] More models
+* [ ] More experiments
+* [ ] More document
+* [ ] Memory-efficient implementation
+* [ ] More pretrained models (ours / other open source projects)
+
+
 ## Code structure
 * ``acsconv``: the core implementation of ACS convolution, including the operators, models, and 2D-to-3D/ACS model converters. 
 * ``experiment_lib``: the lib for running the experiments.
