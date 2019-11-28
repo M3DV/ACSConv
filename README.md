@@ -40,7 +40,7 @@ output_3d = model_3d(input_3d)
 ## How to run the proof-of-concept experiment
 
 ```bash
-cd poc_experiments
+cd experiments/poc/
 ```
 
 1. Generate the proof-of-concept dataset (2D and 3D)
@@ -51,9 +51,9 @@ python generate_poc_data.py
 ```python
 python train_poc_shape.py
 ```
-3. Locate where the 2D model checkpoint is saved (in ```./tmp/poc/noise0.5/shape/.../model.dat``` and then copy the path to ```POCVoxelEnv.shape_checkpoint``` in ```poc_config.py```
+1. Locate where the 2D model checkpoint is saved (in ```./tmp/noise0.5/shape/.../model.dat``` and then copy the path to ```POCVoxelEnv.shape_checkpoint``` in ```poc_config.py```
 
-4. Train the 3D UNet on 3D dataset, with or without 2D pretraining
+2. Train the 3D UNet on 3D dataset, with or without 2D pretraining
 ```python
 python train_poc_voxel.py
 ```
