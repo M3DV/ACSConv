@@ -16,8 +16,9 @@ Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs
 
 ## Code structure
 * ``acsconv``: the core implementation of ACS convolution, including the operators, models, and 2D-to-3D/ACS model converters. 
-* ``experiment_lib``: the lib for running the experiments.
-* ``poc_experiments``: the scripts to run proof-of-concept experiments.
+* ``experiments``: the scripts to run experiments.
+* ``experiments/mylib``: the lib for running the experiments.
+* ``experiments/poc``: the scripts to run proof-of-concept experiments.
 
 ## Convert a 2D model into 3D with a single line of code
 ```python
