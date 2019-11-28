@@ -3,13 +3,13 @@ import os
 import sys
 
 class POCVoxelEnv():
-    data_test = '../data/poc/voxel/test'
-    data_train = '../data/poc/voxel/train'
+    data_test = './data/poc/voxel/test'
+    data_train = './data/poc/voxel/train'
     shape_checkpoint = '<<The 2D UNet model checkpoint>>' # put the 2D model checkpoint here.
 
 class POCShapeEnv():
-    data_test = '../data/poc/shape/test'
-    data_train = '../data/poc/shape/train'
+    data_test = './data/poc/shape/test'
+    data_train = './data/poc/shape/train'
 
 
 class POCShapeConfig():
@@ -35,7 +35,7 @@ class POCShapeConfig():
     noise = 0.5
 
     flag = '_{}samples'.format(train_samples)
-    save = os.path.join(sys.path[0], '../tmp', 'poc', 'noise'+str(noise), 'shape', datetime.today().strftime("%y%m%d_%H%M%S")+flag)
+    save = os.path.join(sys.path[0], './tmp', 'noise'+str(noise), 'shape', datetime.today().strftime("%y%m%d_%H%M%S")+flag)
 
 class POCVoxelConfig():
     # default config
@@ -71,4 +71,4 @@ class POCVoxelConfig():
     # pretrained = True
 
     flag = '_{}samples'.format(train_samples)
-    save = os.path.join(sys.path[0], '../tmp', 'poc', 'noise'+str(noise), 'voxel', conv, datetime.today().strftime("%y%m%d_%H%M%S")+flag)
+    save = os.path.join(sys.path[0], './tmp', 'noise'+str(noise), 'voxel', conv, datetime.today().strftime("%y%m%d_%H%M%S")+flag)

@@ -25,8 +25,8 @@ from tensorboardX import SummaryWriter
 
 
 from poc_dataset import BaseDatasetVoxel
-from experiment_lib.loss import soft_cross_entropy_loss
-from experiment_lib.utils import MultiAverageMeter, save_model, log_results, to_var, set_seed, \
+from mylib.loss import soft_cross_entropy_loss
+from mylib.utils import MultiAverageMeter, save_model, log_results, to_var, set_seed, \
         to_device, initialize, categorical_to_one_hot, copy_file_backup, redirect_stdout
 from poc_config import POCVoxelConfig as cfg
 from poc_config import POCVoxelEnv as env
@@ -35,8 +35,8 @@ from unet import UNet
 from acsconv.models import ACSUNet
 from acsconv.converters import ACSConverter, Conv3dConverter, Conv2_5dConverter
 
-from experiment_lib.metrics import cal_batch_iou, cal_batch_dice
-from experiment_lib.loss import soft_dice_loss
+from mylib.metrics import cal_batch_iou, cal_batch_dice
+from mylib.loss import soft_dice_loss
 
 def main(save_path=cfg.save, 
          n_epochs=cfg.n_epochs, 

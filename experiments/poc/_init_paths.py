@@ -8,4 +8,5 @@ def add_path(path):
 
 
 add_path(os.path.join(sys.path[0], '../'))
-print("add code root path (with `lib`).")
+add_path(os.path.join(sys.path[0], '../../'))
+print("add code root path (with `lib`, 'acsconv').")

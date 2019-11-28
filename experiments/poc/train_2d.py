@@ -22,11 +22,11 @@ from tensorboardX import SummaryWriter
 
 from unet import UNet
 from poc_dataset import BaseDatasetShape
-from experiment_lib.loss import soft_dice_loss
-from experiment_lib.utils import MultiAverageMeter, save_model, log_results, to_var, set_seed, \
+from mylib.loss import soft_dice_loss
+from mylib.utils import MultiAverageMeter, save_model, log_results, to_var, set_seed, \
         to_device, initialize, categorical_to_one_hot, copy_file_backup, redirect_stdout
-from experiment_lib.metrics import cal_batch_iou, cal_batch_dice
-from experiment_lib.loss import soft_dice_loss
+from mylib.metrics import cal_batch_iou, cal_batch_dice
+from mylib.loss import soft_dice_loss
 from poc_config import POCShapeConfig as cfg
 from poc_config import POCShapeEnv as env
 

@@ -18,10 +18,6 @@ class BaseDatasetShape(Dataset):
     def __getitem__(self, index):
         data = np.load(os.path.join(self.data_root,'shape_{}.npz'.format(index)))
         shape = data['shape']
-        # shape = np.zeros((3,)+data['shape'].shape)
-        # shape[0] = data['shape']
-        # shape[1] = data['shape']
-        # shape[2] = data['shape']
         segs = data['segs']
         return torch.from_numpy(shape).float().unsqueeze(0), torch.from_numpy(segs.astype(float)).float()
     def __len__(self):

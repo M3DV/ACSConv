@@ -11,7 +11,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, Dataset
 
 import _init_paths
-from experiment_lib.voxel_transform import rotation
+from mylib.voxel_transform import rotation
 
 def square(d):
     return np.ones((d,d),dtype=bool)
