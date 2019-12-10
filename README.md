@@ -1,7 +1,9 @@
 # ACSConv
+
 Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs/1911.10477))
 
 **[WIP] More code is coming soon (around mid December), stay tuned!**
+
 * [ ] More models
 * [ ] More experiments
 * [ ] More document
@@ -9,18 +11,21 @@ Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs
 * [ ] More pretrained models (ours / other open source projects)
 
 ## Key contributions
+
 * ACS convolution aims at a **plug-and-play replacement** of standard 3D convolution, for 3D medical images.
 * ACS convolution enables **2D-to-3D transfer learning**, which consistently provides significant performance boost in our experiments.
 * Even without pretraining, ACS convolution is **comparable to or even better than** 3D convolution, with **smaller model size** and **less computation**.
 
-
 ## Code structure
+
 * ``acsconv``: the core implementation of ACS convolution, including the operators, models, and 2D-to-3D/ACS model converters. 
 * ``experiments``: the scripts to run experiments.
 * ``experiments/mylib``: the lib for running the experiments.
 * ``experiments/poc``: the scripts to run proof-of-concept experiments.
+* ``experiments/lidc``: the scripts to run LIDC-IDRI experiments.
 
 ## Convert a 2D model into 3D with a single line of code
+
 ```python
 from torchvision.models import resnet18
 from acsconv.converters import ACSConverter
@@ -37,25 +42,8 @@ input_3d = torch.rand(B, C_in, D, H, W)
 output_3d = model_3d(input_3d)
 ```
 
-## How to run the proof-of-concept experiment
+## How to run the experiments
 
-```bash
-cd experiments/poc/
-```
-
-1. Generate the proof-of-concept dataset (2D and 3D)
-```python
-python generate_poc_data.py
-```
-2. Train the 2D UNet on 2D dataset
-```python
-python train_poc_shape.py
-```
-1. Locate where the 2D model checkpoint is saved (in ```./tmp/noise0.5/shape/.../model.dat``` and then copy the path to ```POCVoxelEnv.shape_checkpoint``` in ```poc_config.py```
-
-2. Train the 3D UNet on 3D dataset, with or without 2D pretraining
-```python
-python train_poc_voxel.py
-```
-
-The default 3D model is ACSUNet **p.**. To change ACSConv to Conv3d / Conv2_5d or random initialization, modify ```POCVoxelConfig.conv``` and ```POCVoxelConfig.pretrained``` in ```poc_config.py```.
+* [Proof-of-Concept Segmentation](./experiments/poc/README.md)
+* [Lung Nodule Classification and Segmentation](./experiments/lidc/README.md)
+* ...

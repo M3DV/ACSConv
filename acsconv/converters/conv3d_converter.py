@@ -63,9 +63,9 @@ class Conv3dConverter(BaseConverter):
 
     def load_state_dict(self, state_dict, strict=True, i3d_repeat_axis=None):
         if i3d_repeat_axis is not None:
-            load_state_dict_from_2d_to_i3d(self.model, state_dict, strict, repeat_axis=i3d_repeat_axis)
+            return load_state_dict_from_2d_to_i3d(self.model, state_dict, strict, repeat_axis=i3d_repeat_axis)
         else:
-            self.model.load_state_dict(state_dict, strict)
+            return self.model.load_state_dict(state_dict, strict)
 
 
 def load_state_dict_from_2d_to_i3d(model_3d, state_dict_2d, strict=True, repeat_axis=-1):
@@ -74,4 +74,4 @@ def load_state_dict_from_2d_to_i3d(model_3d, state_dict_2d, strict=True, repeat_
         if state_dict_2d[key].dim()==4:
             repeat_times = present_dict[key].shape[repeat_axis]
             state_dict_2d[key] = torch.stack([state_dict_2d[key]]*repeat_times, dim=repeat_axis) / repeat_times
-    model_3d.load_state_dict(state_dict_2d, strict=strict)
+    return model_3d.load_state_dict(state_dict_2d, strict=strict)

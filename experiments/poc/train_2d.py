@@ -12,7 +12,6 @@ import torch.nn as nn
 import torch.backends.cudnn as cudnn
 import torchvision
 import torch.nn.functional as F
-import matplotlib.pyplot as plt
 
 from tqdm import tqdm
 from collections import OrderedDict

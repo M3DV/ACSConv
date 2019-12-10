@@ -217,7 +217,27 @@ def copy_file_backup(save):
         
     script_file = sys.argv[0]
     shutil.copy(script_file, backup_dir)
-    save_list = {'configs', 'models', 'mylib', 'scripts'}
-    for dir_path in os.listdir(os.path.join(sys.path[0], '../')):
-        if os.path.isdir(os.path.join(sys.path[0], '../', dir_path)) and dir_path in save_list:
-            shutil.copytree(os.path.join(sys.path[0], '../', dir_path), os.path.join(backup_dir, dir_path))
+    shutil.copytree(os.path.join(sys.path[0], '../', 'mylib'), os.path.join(backup_dir, 'mylib'))
+    shutil.copytree(os.path.join(sys.path[0], '../../', 'acsconv'), os.path.join(backup_dir, 'acsconv'))
+    os.makedirs(os.path.join(backup_dir, 'current_experiment'))
+    for file_path in os.listdir(sys.path[0]):
+        if file_path not in ['tmp', 'data', '__pycache__']:
+            shutil.copy(os.path.join(sys.path[0], file_path), os.path.join(backup_dir, 'current_experiment'))
+
+
+from .sync_batchnorm import SynchronizedBatchNorm3d, SynchronizedBatchNorm2d
+def model_to_syncbn(model):
+    preserve_state_dict = model.state_dict()
+    _convert_module_from_bn_to_syncbn(model)
+    model.load_state_dict(preserve_state_dict)
+    return model
+def _convert_module_from_bn_to_syncbn(module):
+    for child_name, child in module.named_children(): 
+        if hasattr(nn, child.__class__.__name__) and \
+            'batchnorm' in child.__class__.__name__.lower():
+            TargetClass = globals()['Synchronized'+child.__class__.__name__]
+            arguments = TargetClass.__init__.__code__.co_varnames[1:]
+            kwargs = {k: getattr(child, k) for k in arguments}
+            setattr(module, child_name, TargetClass(**kwargs))
+        else:
+            _convert_module_from_bn_to_syncbn(child)
