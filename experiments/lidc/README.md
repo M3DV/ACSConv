@@ -6,12 +6,14 @@ cd experiments/lidc/
 ```
 
 1. Download and prepare data
-   Download LIDC data from this link (*coming soon*) and unzip it.
-   Create data directory and move the downloaded data into the directory
+   Download LIDC data from [this link](https://drive.google.com/file/d/1gaMYsgTj0rmnPYGsAFpnB20rWbW-NOll/view?usp=sharing).
+   Create data directory and move the downloaded data to ``./data``.
+   Unzip data.
 
    ```bash
    mkdir ./data
-   mv <unzipped data path> ./data
+   mv <downloaded data> ./data
+   unzip <downloaded data>
    ```
 
 2. Run training scripts
