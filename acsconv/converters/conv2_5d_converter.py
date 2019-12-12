@@ -23,6 +23,8 @@ class Conv2_5dConverter(BaseConverter):
         >>> out = m(x)
     """
     converter_attributes = ['model', 'unsqueeze_axis']
+    target_conv = Conv2_5d
+
     def __init__(self, model, unsqueeze_axis=-3):
         preserve_state_dict = model.state_dict()
         self.model = model
@@ -30,36 +32,12 @@ class Conv2_5dConverter(BaseConverter):
         self.model = self.convert_module(self.model)
         self.load_state_dict(preserve_state_dict, strict=True)
         
-
-    def convert_module(self, module):
-        for child_name, child in module.named_children(): 
-            if isinstance(child, nn.Conv2d):
-                arguments = nn.Conv2d.__init__.__code__.co_varnames[1:]
-                kwargs = {k: getattr(child, k) for k in arguments}
-                kwargs['bias'] = True if kwargs['bias'] is not None else False
-                for k in ['kernel_size','stride','padding','dilation']:
-                    kwargs[k] = _pair_same(kwargs[k])[0]
-                kwargs['unsqueeze_axis'] = self.unsqueeze_axis
-                setattr(module, child_name, Conv2_5d(**kwargs))
-
-            elif hasattr(nn, child.__class__.__name__) and \
-                ('pool' in child.__class__.__name__.lower() or 
-                'norm' in child.__class__.__name__.lower()):
-                if hasattr(nn, child.__class__.__name__.replace('2d', '3d')):
-                    TargetClass = getattr(nn, child.__class__.__name__.replace('2d', '3d'))
-                    arguments = TargetClass.__init__.__code__.co_varnames[1:]
-                    kwargs = {k: getattr(child, k) for k in arguments}
-                    setattr(module, child_name, TargetClass(**kwargs))
-                else:
-                    raise Exception('No corresponding module in 3D for 2d module {}'.format(child.__class__.__name__))
-            elif isinstance(child, nn.Upsample):
-                arguments = nn.Upsample.__init__.__code__.co_varnames[1:]
-                kwargs = {k: getattr(child, k) for k in arguments}
-                kwargs['mode'] = 'trilinear' if kwargs['mode']=='bilinear' else kwargs['mode']
-                setattr(module, child_name, nn.Upsample(**kwargs))
-            else:
-                self.convert_module(child)
-        return module
+    def convert_conv_kwargs(self, kwargs):
+        kwargs['bias'] = True if kwargs['bias'] is not None else False
+        for k in ['kernel_size','stride','padding','dilation']:
+            kwargs[k] = _pair_same(kwargs[k])[0]
+        kwargs['unsqueeze_axis'] = self.unsqueeze_axis
+        return kwargs
 
     def load_state_dict(self, state_dict, strict=True, unsqueeze_axis=-3):
         load_state_dict_from_2d_to_2_5d(self.model, state_dict, strict=strict, unsqueeze_axis=unsqueeze_axis)

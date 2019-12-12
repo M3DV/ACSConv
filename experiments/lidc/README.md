@@ -16,7 +16,7 @@ cd experiments/lidc/
    unzip <downloaded data>
    ```
 
-2. Run training scripts
+2. Run training scripts 
     for segmentation, run
 
     ```bash
