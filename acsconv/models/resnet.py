@@ -1,3 +1,11 @@
+"""
+ResNet18
+Difference from ResNet18 in torchvision for higher resolution:
+1. Modify the stride of first convolution layer (7x7 with stride 2) into 1  
+2. Remove the first max-pooling layer
+3. Downsample and upsample twice in encoder and decoder respectively in FCNResNet
+"""
+
 import torch.nn as nn
 import math
 import torch

@@ -1,3 +1,10 @@
+"""
+VGG16 with BN
+Difference from vgg16 in torchvision for higher resolution:
+1. Layer config changes from [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'] (torchvision)
+                          to [64, 64, 128, 128, 'M', 256, 256, 256, 512, 512, 512, 'M', 512, 512, 512] (acsconv)
+"""
+
 import torch
 import torch.nn as nn
 import torch.utils.model_zoo as model_zoo

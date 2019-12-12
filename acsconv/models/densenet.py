@@ -1,3 +1,10 @@
+"""
+DenseNet121
+Difference from densenet in torchvision for higher resolution:
+1. Modify the stride of first convolution layer (7x7 with stride 2) into 1  
+2. Remove the first max-pooling layer
+"""
+
 import re
 import torch
 import torch.nn as nn
