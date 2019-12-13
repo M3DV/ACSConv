@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import init
-
 import math
 from collections import OrderedDict
 
@@ -10,8 +9,26 @@ from ..utils import _to_triple, _triple_same, _pair_same
 from .base_acsconv import _ACSConv
 
 
-
 class SoftACSConv(_ACSConv):
+    """
+    Decorator class for soft ACS Convolution
+
+    Args:
+        mean: *bool*, optional, the default value is False. If True, it changes to a mean ACS Convolution.
+
+        Other arguments are the same as torch.nn.Conv3d.
+    Examples:
+        >>> import SoftACSConv
+        >>> x = torch.rand(batch_size, 3, D, H, W)
+        >>> # soft ACS Convolution
+        >>> conv = SoftACSConv(3, 10, 1)
+        >>> out = conv(x)
+
+        >>> # mean ACS Convolution
+        >>> conv = SoftACSConv(3, 10, 1, mean=Ture)
+        >>> out = conv(x)
+    """
+
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
                  padding=0, dilation=1, groups=1, mean=False,
                  bias=True, padding_mode='zeros'):
@@ -24,12 +41,21 @@ class SoftACSConv(_ACSConv):
         self.mean = mean
 
     def conv3D_output_shape_f(self,i, input_shape):
+        """
+        Calculate the original output size assuming the convolution is nn.Conv3d based on 
+        input size, kernel size, dilation, padding and stride.
+        """
         return math.floor((input_shape[i]-self.kernel_size[i]-(self.dilation[i]-1)*
                                          (self.kernel_size[i]-1)+2*self.padding[i])
                                         /self.stride[i])+1
     
     def forward(self, x):
-        
+        """
+        Convolution forward function
+        Conduct convolution on three directions seperately and then 
+        aggregate the three parts of feature maps by *soft* or *mean* way. 
+        Bias is added at last.
+        """
         B, C_in, *input_shape = x.shape
         conv3D_output_shape = (self.conv3D_output_shape_f(0, input_shape), 
                                self.conv3D_output_shape_f(1, input_shape), 
@@ -74,3 +100,7 @@ class SoftACSConv(_ACSConv):
             f += self.bias.view(1,self.out_channels,1,1,1)
             
         return f
+
+    def extra_repr(self):
+        s = super().extra_repr() + ', mean={mean}'
+        return s.format(**self.__dict__)

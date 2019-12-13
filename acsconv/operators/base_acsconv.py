@@ -9,6 +9,13 @@ from collections import OrderedDict
 from ..utils import _to_triple, _triple_same, _pair_same
 
 class _ACSConv(nn.Module):
+    """
+    Base class for ACS Convolution
+    Basically the same with _ConvNd in torch.nn.
+
+    Warnings:
+        The kernel size should be the same in the three directions under this implementation.
+    """
     def __init__(self,  in_channels, out_channels, kernel_size, stride,
                  padding, dilation, transposed, output_padding,
                  groups, bias, padding_mode):
@@ -39,7 +46,7 @@ class _ACSConv(nn.Module):
         else:
             self.weight = nn.Parameter(torch.Tensor(
                 out_channels, in_channels // groups, *_pair_same(kernel_size) ))
-        # print(bias)
+
         if bias:
             self.bias = nn.Parameter(torch.Tensor(out_channels))
         else:
@@ -48,8 +55,6 @@ class _ACSConv(nn.Module):
 
         self.reset_parameters()
 
-            
-        
     def reset_parameters(self):
         init.kaiming_uniform_(self.weight, a=math.sqrt(5))
         if self.bias is not None:
