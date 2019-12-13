@@ -18,7 +18,7 @@ class Conv3dConverter(BaseConverter):
         >>> # m is a standard pytorch model
         >>> m = torchvision.models.resnet18(True)
         >>> m = Conv3dConverter(m)
-        >>> # after converted, m is using Conv3d and capable of dealing with 3D data
+        >>> # after converted, m is using Conv3d and capable of processing 3D volumes
         >>> x = torch.rand(batch_size, in_channels, D, H, W)
         >>> out = m(x)
     """

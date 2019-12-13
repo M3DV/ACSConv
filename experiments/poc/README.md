@@ -18,7 +18,7 @@ cd experiments/poc/
    ```
 
 3. Locate where the 2D model checkpoint is saved (in ```./tmp/noise0.5/shape/.../model.dat``` and then copy the path to ```POCVoxelEnv.shape_checkpoint``` in ```poc_config.py```
-4. Train the 3D UNet on 3D dataset, with or without 2D pretraining
+4. Train the 3D UNet on 3D volumesset, with or without 2D pretraining
 
    ```bash
    python train_poc_voxel.py

@@ -17,7 +17,7 @@ class SoftACSConverter(BaseConverter):
         >>> # m is a standard pytorch model
         >>> m = torchvision.models.resnet18(True)
         >>> m = SoftACSConverter(m)
-        >>> # after converted, m is using SoftACSConv and capable of dealing with 3D data
+        >>> # after converted, m is using SoftACSConv and capable of processing 3D volumes
         >>> x = torch.rand(batch_size, in_channels, D, H, W)
         >>> out = m(x)
     """
