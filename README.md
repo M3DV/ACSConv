@@ -2,7 +2,7 @@
 
 Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs/1911.10477))
 
-**[WIP] More code is coming soon (around mid December), stay tuned!**
+**[WIP] More code is coming soon, stay tuned!**
 
 * [ ] More models
 * [ ] More experiments
@@ -21,7 +21,7 @@ Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs
 * ``acsconv``
   the core implementation of ACS convolution, including the operators, models, and 2D-to-3D/ACS model converters. 
   * ``operators``: include ACSConv, SoftACSConv and Conv2_5d.
-  * ``converters``: include converters which convert 2D model to 3d/ACS/Conv2_5d counterparts.
+  * ``converters``: include converters which convert 2D models to 3d/ACS/Conv2_5d counterparts.
   * ``models``: Native ACS models. 
 * ``experiments`` 
   the scripts to run experiments.
@@ -47,7 +47,7 @@ input_3d = torch.rand(B, C_in, D, H, W)
 output_3d = model_3d(input_3d)
 ```
 
-## Utilize ACS operators
+## Usage of ACS operators
 
 ```python
 from acsconv.operators import ACSConv, SoftACSConv
@@ -60,7 +60,8 @@ conv = SoftACSConv(in_channels=3, out_channels=10, kernel_size=3, padding=1)
 out = conv(x)
 ```
 
-## Utilize native ACS models
+## Usage of native ACS models
+
 ```python
 from acsconv.models.acsunet import ACSUnet
 unet_3d = ACSUnet(num_classes=3)
