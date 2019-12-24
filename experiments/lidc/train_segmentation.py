@@ -39,10 +39,11 @@ def main(save_path=cfg.save,
          n_epochs=cfg.n_epochs, 
          seed=cfg.seed
          ):
+    # set seed
     if seed is not None:
         set_seed(cfg.seed)
     cudnn.benchmark = True
-
+    # back up your code
     os.makedirs(save_path)
     copy_file_backup(save_path)
     redirect_stdout(save_path)
@@ -52,11 +53,11 @@ def main(save_path=cfg.save,
     valid_set = None
     test_set = LIDCSegDataset(crop_size=48, move=5, data_path=env.data, train=False)
 
-    # Models
+    # Define model
     model_dict = {'resnet18': FCNResNet, 'vgg16': FCNVGG, 'densenet121': FCNDenseNet}
     model = model_dict[cfg.backbone](pretrained=cfg.pretrained, num_classes=2, backbone=cfg.backbone)
 
-
+    # convert to counterparts and load pretrained weights according to various convolution
     if cfg.conv=='ACSConv':
         model  = model_to_syncbn(ACSConverter(model))
     if cfg.conv=='Conv2_5d':
@@ -71,8 +72,8 @@ def main(save_path=cfg.save,
             elif cfg.pretrained_3d == 'mednet':
                 model = load_mednet_pretrained_weights(model, env.mednet_resnet18_pretrain_path)
     print(model)
-
     torch.save(model.state_dict(), os.path.join(save_path, 'model.dat'))
+    # train and test the model
     train(model=model, train_set=train_set, valid_set=valid_set, test_set=test_set, save=save_path, n_epochs=n_epochs)
 
     print('Done!')
@@ -80,9 +81,10 @@ def main(save_path=cfg.save,
 
 
 def train(model, train_set, test_set, save, valid_set, n_epochs):
-
-
-    # Data loaders
+    '''
+    Main training function
+    '''
+    # Dataloaders
     train_loader = DataLoader(train_set, batch_size=cfg.batch_size, shuffle=True,
                                 pin_memory=(torch.cuda.is_available()), num_workers=cfg.num_workers)
     test_loader = DataLoader(test_set, batch_size=cfg.batch_size, shuffle=False,
@@ -94,7 +96,7 @@ def train(model, train_set, test_set, save, valid_set, n_epochs):
                                 pin_memory=(torch.cuda.is_available()), num_workers=cfg.num_workers)
     # Model on cuda
     model = to_device(model)
-
+    # Wrap model for multi-GPUs, if necessary
     model_wrapper = model
     if torch.cuda.is_available() and torch.cuda.device_count() > 1:       
         if cfg.use_syncbn:
@@ -102,11 +104,11 @@ def train(model, train_set, test_set, save, valid_set, n_epochs):
             model_wrapper = DataParallelWithCallback(model).cuda()
         else:
             model_wrapper = torch.nn.DataParallel(model).cuda()
-
+    # optimizer and scheduler
     optimizer = torch.optim.Adam(model_wrapper.parameters(), lr=cfg.lr)
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=cfg.milestones,
                                                      gamma=cfg.gamma)
-    # Start log
+    # Start logging
     logs = ['loss', 'iou', 'dice', 'iou0', 'iou1', 'dice0', 'dice1', 'dice_global']
     train_logs = ['train_'+log for log in logs]
     test_logs = ['test_'+log for log in logs]
@@ -121,13 +123,14 @@ def train(model, train_set, test_set, save, valid_set, n_epochs):
         f.write('iter,train_loss,\n')
     writer = SummaryWriter(log_dir=os.path.join(save, 'Tensorboard_Results'))
 
-    # Train model
+    # train and test the model
     best_dice_global = 0
     global iteration
     iteration = 0
     for epoch in range(n_epochs):
         os.makedirs(os.path.join(cfg.save, 'epoch_{}'.format(epoch)))
         print('learning rate: ', scheduler.get_lr())
+        # train epoch
         train_meters = train_epoch(
             model=model_wrapper,
             loader=train_loader,
@@ -136,6 +139,7 @@ def train(model, train_set, test_set, save, valid_set, n_epochs):
             n_epochs=n_epochs,
             writer=writer
         )
+        # test epoch
         test_meters = test_epoch(
             model=model_wrapper,
             loader=test_loader,
@@ -152,7 +156,7 @@ def train(model, train_set, test_set, save, valid_set, n_epochs):
         for i, key in enumerate(test_logs):
             log_dict[key] = test_meters[i]
         log_results(save, epoch, log_dict, writer=writer)
-
+        # save model checkpoint
         if cfg.save_all:
             torch.save(model.state_dict(), os.path.join(save, 'epoch_{}'.format(epoch), 'model.dat'))
 
@@ -162,15 +166,17 @@ def train(model, train_set, test_set, save, valid_set, n_epochs):
             print('New best global dice: %.4f' % log_dict['test_dice_global'])
         else:
             print('Current best global dice: %.4f' % best_dice_global)
+    # end 
     writer.close()
-
     with open(os.path.join(save, 'logs.csv'), 'a') as f:
         f.write(',,,,best global dice,%0.5f\n' % (best_dice_global))
-    # Final test of the best model on test set
     print('best global dice: ', best_dice_global)
 
 
 def train_epoch(model, loader, optimizer, epoch, n_epochs, print_freq=1, writer=None):
+    '''
+    One training epoch
+    '''
     meters = MultiAverageMeter()
     # Model on train mode
     model.train()
@@ -181,7 +187,7 @@ def train_epoch(model, loader, optimizer, epoch, n_epochs, print_freq=1, writer=
     for batch_idx, (x, y) in enumerate(loader):
         x = to_var(x)
         y = to_var(y)
-
+        # forward and backward
         pred_logit = model(x)
         y_one_hot = categorical_to_one_hot(y, dim=1, expand_dim=False)
 
@@ -190,16 +196,15 @@ def train_epoch(model, loader, optimizer, epoch, n_epochs, print_freq=1, writer=
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        # calculate metrics
         pred_classes = pred_logit.argmax(1)
         intersection += ((pred_classes==1) * (y[:,0]==1)).sum().item()
         union += ((pred_classes==1).sum() + y[:,0].sum()).item()
-
-        # measure accuracy and record loss
         batch_size = y.size(0)
 
         iou = cal_batch_iou(pred_logit, y_one_hot)
         dice = cal_batch_dice(pred_logit, y_one_hot)
-
+        # log
         writer.add_scalar('train_loss_logs', loss.item(), iteration)
         with open(os.path.join(cfg.save, 'loss_logs.csv'), 'a') as f:
             f.write('%09d,%0.6f,\n'%((iteration + 1),loss.item(),))
@@ -210,10 +215,7 @@ def train_epoch(model, loader, optimizer, epoch, n_epochs, print_freq=1, writer=
                             [dice[i].item() for i in range(len(dice))]+ \
                             [time.time() - end]
         meters.update(logs, batch_size)   
-
-        # measure elapsed time
         end = time.time()
-
 
         # print stats
         print_freq = 2 // meters.val[-1] + 1
@@ -232,6 +234,9 @@ def train_epoch(model, loader, optimizer, epoch, n_epochs, print_freq=1, writer=
 
 
 def test_epoch(model, loader, epoch, print_freq=1, is_test=True, writer=None):
+    '''
+    One test epoch
+    '''
     meters = MultiAverageMeter()
     model.eval()
     intersection = 0
@@ -239,11 +244,11 @@ def test_epoch(model, loader, epoch, print_freq=1, is_test=True, writer=None):
     end = time.time()
     with torch.no_grad():
         for batch_idx, (x, y) in enumerate(loader):
-
             x = to_var(x)
             y = to_var(y)
-
+            # forward
             pred_logit = model(x)
+            # calculate metrics
             y_one_hot = categorical_to_one_hot(y, dim=1, expand_dim=False)
             pred_classes = pred_logit.argmax(1)
             intersection += ((pred_classes==1) * (y[:,0]==1)).sum().item()

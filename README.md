@@ -21,7 +21,7 @@ Reinventing 2D Convolutions for 3D Medical Images ([arXiv](https://arxiv.org/abs
 * ``acsconv``
   the core implementation of ACS convolution, including the operators, models, and 2D-to-3D/ACS model converters. 
   * ``operators``: include ACSConv, SoftACSConv and Conv2_5d.
-  * ``converters``: include converters which convert 2D model to 3d/ACS/Conv2_5d counterparts.
+  * ``converters``: include converters which convert 2D models to 3d/ACS/Conv2_5d counterparts.
   * ``models``: Native ACS models. 
 * ``experiments`` 
   the scripts to run experiments.
