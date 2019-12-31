@@ -26,16 +26,15 @@ class BaseConverter(object):
                 kwargs = self.convert_conv_kwargs(kwargs)
                 setattr(module, child_name, self.__class__.target_conv(**kwargs))
             elif hasattr(nn, child.__class__.__name__) and \
-                'adaptive' in child.__class__.__name__.lower():
-                    for k in kwargs.keys():
-                        kwargs[k] = _triple_same(kwargs[k])
-            elif hasattr(nn, child.__class__.__name__) and \
                 ('pool' in child.__class__.__name__.lower() or 
                 'norm' in child.__class__.__name__.lower()):
                 if hasattr(nn, child.__class__.__name__.replace('2d', '3d')):
                     TargetClass = getattr(nn, child.__class__.__name__.replace('2d', '3d'))
                     arguments = TargetClass.__init__.__code__.co_varnames[1:]
                     kwargs = {k: getattr(child, k) for k in arguments}
+                    if 'adaptive' in child.__class__.__name__.lower():
+                        for k in kwargs.keys():
+                            kwargs[k] = _triple_same(kwargs[k])
                     setattr(module, child_name, TargetClass(**kwargs))
                 else:
                     raise Exception('No corresponding module in 3D for 2d module {}'.format(child.__class__.__name__))
