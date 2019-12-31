@@ -1,5 +1,5 @@
 import torch.nn as nn
-
+from ..utils import _triple_same
 class BaseConverter(object):
     """
     base class for converters
@@ -25,7 +25,10 @@ class BaseConverter(object):
                 kwargs = {k: getattr(child, k) for k in arguments}
                 kwargs = self.convert_conv_kwargs(kwargs)
                 setattr(module, child_name, self.__class__.target_conv(**kwargs))
-
+            elif hasattr(nn, child.__class__.__name__) and \
+                'adaptive' in child.__class__.__name__.lower():
+                    for k in kwargs.keys():
+                        kwargs[k] = _triple_same(kwargs[k])
             elif hasattr(nn, child.__class__.__name__) and \
                 ('pool' in child.__class__.__name__.lower() or 
                 'norm' in child.__class__.__name__.lower()):
