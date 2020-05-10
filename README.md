@@ -1,6 +1,6 @@
 # ACSConv
 
-Reinventing 2D Convolutions for 3D Medical Images ([arXiv:1911.10477](https://arxiv.org/abs/1911.10477))
+Reinventing 2D Convolutions for 3D Images ([arXiv:1911.10477](https://arxiv.org/abs/1911.10477))
 
 ## Key contributions
 
