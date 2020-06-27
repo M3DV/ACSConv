@@ -51,8 +51,8 @@ class ACSConv(_ACSConv):
         and conduct convolution on three directions seperately. Bias is added at last.
         """
 
-        return acs_conv_f(x, self.weight, self.kernel_size, self.dilation, self.padding, self.stride, self.groups, 
-                            self.bias, self.out_channels, self.acs_kernel_split)
+        return acs_conv_f(x, self.weight, self.bias, self.kernel_size, self.dilation, self.padding, self.stride, 
+                            self.groups, self.out_channels, self.acs_kernel_split)
 
 
     def extra_repr(self):
