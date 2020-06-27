@@ -1,4 +1,4 @@
-from datetime import datetime
+import time
 import os
 import sys
 
@@ -44,7 +44,7 @@ class LIDCSegConfig():
         flag = '_' + pretrained_3d
     else:
         flag = '_pretrained' if pretrained else '_nopretrained'
-    save = os.path.join(sys.path[0], './tmp', 'LIDC', backbone, conv, datetime.today().strftime("%y%m%d_%H%M%S")+flag)
+    save = os.path.join(sys.path[0], './tmp', 'LIDC', backbone, conv, time.strftime("%y%m%d_%H%M%S")+flag)
 
 class LIDCClassConfig(LIDCSegConfig):
     batch_size = 24
@@ -73,4 +73,4 @@ class LIDCClassConfig(LIDCSegConfig):
     pretrained = True # True, False
 
     flag = '_pretrained' if pretrained else '_nopretrained'
-    save = os.path.join(sys.path[0], './tmp', 'LIDCClass', backbone, conv, datetime.today().strftime("%y%m%d_%H%M%S")+flag)
+    save = os.path.join(sys.path[0], './tmp', 'LIDCClass', backbone, conv, time.strftime("%y%m%d_%H%M%S")+flag)

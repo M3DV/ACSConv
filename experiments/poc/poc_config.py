@@ -1,4 +1,4 @@
-from datetime import datetime
+import time
 import os
 import sys
 
@@ -35,7 +35,7 @@ class POCShapeConfig():
     noise = 0.5
 
     flag = '_{}samples'.format(train_samples)
-    save = os.path.join(sys.path[0], './tmp', 'noise'+str(noise), 'shape', datetime.today().strftime("%y%m%d_%H%M%S")+flag)
+    save = os.path.join(sys.path[0], './tmp', 'noise'+str(noise), 'shape', time.strftime("%y%m%d_%H%M%S")+flag)
 
 class POCVoxelConfig():
     # default config
@@ -71,4 +71,4 @@ class POCVoxelConfig():
     # pretrained = True
 
     flag = '_{}samples'.format(train_samples)
-    save = os.path.join(sys.path[0], './tmp', 'noise'+str(noise), 'voxel', conv, datetime.today().strftime("%y%m%d_%H%M%S")+flag)
+    save = os.path.join(sys.path[0], './tmp', 'noise'+str(noise), 'voxel', conv, time.strftime("%y%m%d_%H%M%S")+flag)
