@@ -30,6 +30,7 @@ class ACSConvOp(torch.autograd.Function):
         ctx.padding = padding 
         ctx.dilation = dilation
         ctx.groups = groups
+        ctx.kernel_size = kernel_size
         ctx.acs_kernel_split = acs_kernel_split
 
         B, C_in, *input_shape = x.shape
@@ -90,6 +91,7 @@ class ACSConvOp(torch.autograd.Function):
         padding = ctx.padding 
         dilation = ctx.dilation
         groups = ctx.groups
+        kernel_size = ctx.kernel_size
         acs_kernel_split = ctx.acs_kernel_split
         conv3D_output_shape = ctx.conv3D_output_shape
         
@@ -106,9 +108,9 @@ class ACSConvOp(torch.autograd.Function):
                                                 kernel_size[2]//2:kernel_size[2]//2+stride[2]*(conv3D_output_shape[2]-1)+1
                                                 ]
 
-        weight_a = weight[0:acs_kernel_split[0]].unsqueeze(2)
-        weight_c = weight[acs_kernel_split[0]:(acs_kernel_split[0]+acs_kernel_split[1])].unsqueeze(3)
-        weight_s = weight[(acs_kernel_split[0]+acs_kernel_split[1]):].unsqueeze(4)
+        weight_a = weight[0:acs_kernel_split[0]].unsqueeze(2).contiguous()
+        weight_c = weight[acs_kernel_split[0]:(acs_kernel_split[0]+acs_kernel_split[1])].unsqueeze(3).contiguous()
+        weight_s = weight[(acs_kernel_split[0]+acs_kernel_split[1]):].unsqueeze(4).contiguous()
 
         grad_output_a = grad_output[:, 0:acs_kernel_split[0]]
         grad_output_c = grad_output[:, acs_kernel_split[0]:(acs_kernel_split[0]+acs_kernel_split[1])]
@@ -121,36 +123,36 @@ class ACSConvOp(torch.autograd.Function):
                     torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic
                 ) 
             if c_x is not None:
-                grad_input_a = backward_cpp.backward_input(
+                grad_input_c = backward_cpp.backward_input(
                     c_x.shape, weight_c, grad_output_c, stride, (padding[0],0,padding[2]), dilation, groups,
                     torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic
                 ) 
             if s_x is not None:
-                grad_input_a = backward_cpp.backward_input(
+                grad_input_s = backward_cpp.backward_input(
                     s_x.shape, weight_s, grad_output_s, stride, (padding[0],padding[1],0), dilation, groups,
                     torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic
                 )    
             grad_input = grad_input_a + grad_input_c + grad_input_s
         if ctx.needs_input_grad[1]:
-            grad_weight = backward_cpp.backward_weight(
-                x, weight.shape, grad_output, stride, padding, dilation, groups,
-                torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic
-            )
+
             grad_weight_list = []
             if a_x is not None:
+                print(a_x.shape, weight_a.shape, grad_output_a.shape)
+                print(torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic)
+                print(padding)
                 grad_weight_a = backward_cpp.backward_weight(
                     a_x, weight_a.shape, grad_output_a, stride, (0,padding[1],padding[2]), dilation, groups,
                     torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic
                 )
                 grad_weight_list.append(grad_weight_a)
             if c_x is not None:
-                grad_weight_a = backward_cpp.backward_weight(
-                    c_x, weight_c.shape, grad_output_c, stride, (padding[0],0,padding[2]), dilation, groups,
+                grad_weight_c = backward_cpp.backward_weight(
+                    c_x, weight_c.shape, grad_output_c, stride, padding, dilation, groups,
                     torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic
                 ) 
                 grad_weight_list.append(grad_weight_c)
             if s_x is not None:
-                grad_weight_a = backward_cpp.backward_weight(
+                grad_weight_s = backward_cpp.backward_weight(
                     s_x, weight_s.shape, grad_output_s, stride, (padding[0],padding[1],0), dilation, groups,
                     torch.backends.cudnn.benchmark, torch.backends.cudnn.deterministic
                 )    
@@ -163,7 +165,7 @@ class ACSConvOp(torch.autograd.Function):
 
 acs_conv_f = ACSConvOp.apply
 
-'''z
+'''
 def acs_conv_f(x, weight, bias, kernel_size, dilation, padding, stride, groups, out_channels, acs_kernel_split):
     B, C_in, *input_shape = x.shape
     conv3D_output_shape = (conv3D_output_shape_f(0, input_shape, kernel_size, dilation, padding, stride), 
