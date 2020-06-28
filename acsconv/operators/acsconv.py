@@ -58,4 +58,3 @@ class ACSConv(_ACSConv):
     def extra_repr(self):
         s = super().extra_repr() + ', acs_kernel_split={acs_kernel_split}'
         return s.format(**self.__dict__)
-
