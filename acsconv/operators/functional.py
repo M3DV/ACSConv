@@ -4,13 +4,6 @@ import math
 import os
 
 
-from torch.utils.cpp_extension import load
-
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-backward_cpp = load(name='backward_cpp', sources=[os.path.join(dname, 'backward_wrap.cpp')])
-
-
 def conv3D_output_shape_f(i, input_shape, kernel_size, dilation, padding, stride):
     """
     Calculate the original output size assuming the convolution is nn.Conv3d based on 
