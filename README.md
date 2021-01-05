@@ -1,6 +1,7 @@
 # ACSConv
 
 Reinventing 2D Convolutions for 3D Images ([arXiv](https://arxiv.org/abs/1911.10477))
+IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021
 
 ## Key contributions
 
