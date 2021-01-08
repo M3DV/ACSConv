@@ -2,7 +2,7 @@
 
 Reinventing 2D Convolutions for 3D Images ([arXiv](https://arxiv.org/abs/1911.10477))
 
-IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021
+IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021 ([DOI](http://doi.org/10.1109/JBHI.2021.3049452))
 
 ## Key contributions
 
@@ -69,9 +69,3 @@ output_3d = unet_3d(input_3d)
 * [Proof-of-Concept Segmentation](./experiments/poc/README.md)
 * [Lung Nodule Classification and Segmentation](./experiments/lidc/README.md)
 * ...
-
-**[WIP] More code is coming soon, stay tuned!**
-
-* [ ] More document
-* [ ] Memory-efficient implementation
-* [ ] More pretrained models (ours / other open source projects)
