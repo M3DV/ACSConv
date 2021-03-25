@@ -8,6 +8,8 @@ def readme():
         content = f.read()
     return content
 
+with open('requirements.txt', 'r') as f:
+    requirements = f.readlines()
 
 setup(
     name='ACSConv',
@@ -18,6 +20,7 @@ setup(
     author_email='jekyll4168@sjtu.edu.cn',
     description='[IEEE JBHI] Reinventing 2D Convolutions for 3D Images',
     long_description=readme(),
+    install_requires=requirements,
     packages=find_packages(),
     zip_safe=True
 )
