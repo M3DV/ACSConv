@@ -63,10 +63,6 @@ B) Or install it through `pip` following the command bellow:
 pip install git+git://github.com/M3DV/ACSConv.git#egg=ACSConv
 ```
 
-> **Note 1**: As noted by [David Winterbottom](https://codeinthehole.com/tips/using-pip-and-requirementstxt-to-install-from-the-head-of-a-github-branch/), if you freeze the environment to export the dependencies, note that this will add the specific commit to your requirements, so it might be a good idea to delete the commit ID from it.
-> ___
-> **Note 2**: Due to the simplicity of this "package", this installation method was preferred over the more traditional [PyPI](https://pypi.org/).
-
 ## Code structure
 
 * ``acsconv``
