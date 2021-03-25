@@ -23,6 +23,10 @@ class BaseConverter(object):
         for child_name, child in module.named_children(): 
             if isinstance(child, nn.Conv2d):
                 arguments = nn.Conv2d.__init__.__code__.co_varnames[1:]
+
+                # cleaning the tuple due to new PyTorch namming schema (or added new variables)
+                arguments = [a for a in arguments if a not in ['kernel_size_', 'stride_', 'padding_', 'dilation_']]
+
                 kwargs = {k: getattr(child, k) for k in arguments}
                 kwargs = self.convert_conv_kwargs(kwargs)
                 setattr(module, child_name, self.__class__.target_conv(**kwargs))
