@@ -4,6 +4,9 @@ Reinventing 2D Convolutions for 3D Images ([arXiv](https://arxiv.org/abs/1911.10
 
 IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021 ([DOI](http://doi.org/10.1109/JBHI.2021.3049452))
 
+**News**:
+- 2021.4.19 - torch 1.8 supported
+
 ## Key contributions
 
 * ACS convolution aims at a **plug-and-play replacement** of standard 3D convolution, for 3D medical images.
@@ -12,43 +15,32 @@ IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021 ([DOI](http:
 
 ## Requirements
 
-### Base requirements
-
-The bare minimum to run the ACSConv package.
+### PyTorch requirements
 
 ```python
-torch>=1.8.1
-torchvision>=0.9.0
+torch>=1.0.0 and torch<=1.8.0
+```
+
+You can install it on the [official homepage](https://pytorch.org/docs/stable/index.html).
+
+### Other requirements
+
+All libraries needed to run the included experiments (base requirements included).
+
+```python
+fire
+jupyterlab
+matplotlib
+pandas
+tqdm
+sklearn
+tensorboardx
 ```
 
 You can install them either manually or through the command:
 
 ``` bash
 pip install -r requirements.txt
-```
-
-### Experimental requirements
-
-All libraries needed to run the included experiments (base requirements included).
-
-```python
-fire==0.4.0
-jupyterlab>=3.0.12
-matplotlib==3.3.4
-pandas==1.1.3
-torch==1.8.0
-torchvision==0.9.0
-tqdm==4.59.0
-scikit-image==0.17.2
-scikit-learn==0.24.1
-scipy==1.5.2
-tensorboardx==2.1
-```
-
-You can install them either manually or through the command:
-
-``` bash
-pip install -r experimental_requirements.txt
 ```
 
 ## Package Installation
