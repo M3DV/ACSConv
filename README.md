@@ -10,14 +10,67 @@ IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021 ([DOI](http:
 * ACS convolution enables **2D-to-3D transfer learning**, which consistently provides significant performance boost in our experiments.
 * Even without pretraining, ACS convolution is **comparable to or even better than** 3D convolution, with **smaller model size** and **less computation**.
 
+## Requirements
+
+### Base requirements
+
+The bare minimum to run the ACSConv package.
+
+```python
+torch>=1.8.1
+torchvision>=0.9.0
+```
+
+You can install them either manually or through the command:
+
+``` bash
+pip install -r requirements.txt
+```
+
+### Experimental requirements
+
+All libraries needed to run the included experiments (base requirements included).
+
+```python
+fire==0.4.0
+jupyterlab>=3.0.12
+matplotlib==3.3.4
+pandas==1.1.3
+torch==1.8.0
+torchvision==0.9.0
+tqdm==4.59.0
+scikit-image==0.17.2
+scikit-learn==0.24.1
+scipy==1.5.2
+tensorboardx==2.1
+```
+
+You can install them either manually or through the command:
+
+``` bash
+pip install -r experimental_requirements.txt
+```
+
+## Package Installation
+
+If you want to use this class, you have two options:
+
+A) Simply copy and paste it in your project;
+
+B) Or install it through `pip` following the command bellow:
+
+``` bash
+pip install git+git://github.com/M3DV/ACSConv.git#egg=ACSConv
+```
+
 ## Code structure
 
 * ``acsconv``
-  the core implementation of ACS convolution, including the operators, models, and 2D-to-3D/ACS model converters. 
+  the core implementation of ACS convolution, including the operators, models, and 2D-to-3D/ACS model converters.
   * ``operators``: include ACSConv, SoftACSConv and Conv2_5d.
   * ``converters``: include converters which convert 2D models to 3d/ACS/Conv2_5d counterparts.
-  * ``models``: Native ACS models. 
-* ``experiments`` 
+  * ``models``: Native ACS models.
+* ``experiments``
   the scripts to run experiments.
   * ``mylib``: the lib for running the experiments.
   * ``poc``: the scripts to run proof-of-concept experiments.
