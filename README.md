@@ -5,6 +5,7 @@ Reinventing 2D Convolutions for 3D Images ([arXiv](https://arxiv.org/abs/1911.10
 IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021 ([DOI](http://doi.org/10.1109/JBHI.2021.3049452))
 
 **News**:
+- 2021.12.17 - torch 1.10 supported & pip installation supported.
 - 2021.4.19 - torch 1.8 supported
 
 ## Key contributions
@@ -13,12 +14,27 @@ IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021 ([DOI](http:
 * ACS convolution enables **2D-to-3D transfer learning**, which consistently provides significant performance boost in our experiments.
 * Even without pretraining, ACS convolution is **comparable to or even better than** 3D convolution, with **smaller model size** and **less computation**.
 
-## Requirements
 
+## Package Installation
+
+If you want to use this class, you have two options:
+
+A) Install ACSConv as a standard Python package from PyPI:
+
+```bash
+pip install ACSConv
+```
+
+B) Simply copy and paste it in your project;
+
+
+You could run the `test.py` to validate the installation.
+
+## Requirements
 ### PyTorch requirements
 
 ```python
-torch>=1.0.0 and torch<=1.8.0
+torch>=1.0.0 and torch<=1.10.0
 ```
 
 You can install it on the [official homepage](https://pytorch.org/docs/stable/index.html).
@@ -37,24 +53,6 @@ sklearn
 tensorboardx
 ```
 
-You can install them either manually or through the command:
-
-``` bash
-pip install -r requirements.txt
-```
-
-## Package Installation
-
-If you want to use this class, you have two options:
-
-A) Simply copy and paste it in your project;
-
-B) Or install it through `pip` following the command bellow:
-
-``` bash
-pip install git+git://github.com/M3DV/ACSConv.git#egg=ACSConv
-```
-
 ## Code structure
 
 * ``acsconv``
@@ -71,6 +69,7 @@ pip install git+git://github.com/M3DV/ACSConv.git#egg=ACSConv
 ## Convert a 2D model into 3D with a single line of code
 
 ```python
+import torch
 from torchvision.models import resnet18
 from acsconv.converters import ACSConverter
 # model_2d is a standard pytorch 2D model
@@ -89,8 +88,10 @@ output_3d = model_3d(input_3d)
 ## Usage of ACS operators
 
 ```python
+import torch
 from acsconv.operators import ACSConv, SoftACSConv
-x = torch.rand(batch_size, 3, D, H, W)
+B, C_in, D, H, W = (1, 3, 64, 64, 64)
+x = torch.rand(B, C_in, D, H, W)
 # ACSConv to process 3D volumnes
 conv = ACSConv(in_channels=3, out_channels=10, kernel_size=3, padding=1)
 out = conv(x)
@@ -102,9 +103,10 @@ out = conv(x)
 ## Usage of native ACS models
 
 ```python
-from acsconv.models.acsunet import ACSUnet
-unet_3d = ACSUnet(num_classes=3)
-B, C_in, D, H, W = (1, 3, 64, 64, 64)
+import torch
+from acsconv.models.acsunet import ACSUNet
+unet_3d = ACSUNet(num_classes=3)
+B, C_in, D, H, W = (1, 1, 64, 64, 64)
 input_3d = torch.rand(B, C_in, D, H, W)
 output_3d = unet_3d(input_3d)
 ```

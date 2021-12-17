@@ -25,7 +25,7 @@ class BaseConverter(object):
                 arguments = nn.Conv2d.__init__.__code__.co_varnames[1:]
 
                 # cleaning the tuple due to new PyTorch namming schema (or added new variables)
-                arguments = [a for a in arguments if a not in ['kernel_size_', 'stride_', 'padding_', 'dilation_']]
+                arguments = [a for a in arguments if a not in ['device', 'dtype', 'factory_kwargs','kernel_size_', 'stride_', 'padding_', 'dilation_']]
 
                 kwargs = {k: getattr(child, k) for k in arguments}
                 kwargs = self.convert_conv_kwargs(kwargs)
@@ -36,6 +36,7 @@ class BaseConverter(object):
                 if hasattr(nn, child.__class__.__name__.replace('2d', '3d')):
                     TargetClass = getattr(nn, child.__class__.__name__.replace('2d', '3d'))
                     arguments = TargetClass.__init__.__code__.co_varnames[1:]
+                    arguments = [a for a in arguments if a not in ['device', 'dtype', 'factory_kwargs']]
                     kwargs = {k: getattr(child, k) for k in arguments}
                     if 'adaptive' in child.__class__.__name__.lower():
                         for k in kwargs.keys():

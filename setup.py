@@ -8,9 +8,6 @@ def readme():
         content = f.read()
     return content
 
-with open('requirements.txt', 'r') as f:
-    requirements = f.readlines()
-
 setup(
     name='ACSConv',
     version=acsconv.__version__,
@@ -18,9 +15,28 @@ setup(
     license='Apache-2.0 License',
     author='Jiancheng Yang and Xiaoyang Huang',
     author_email='jekyll4168@sjtu.edu.cn',
+    python_requires=">=3.6.0",
     description='[IEEE JBHI] Reinventing 2D Convolutions for 3D Images',
     long_description=readme(),
-    install_requires=requirements,
+    install_requires=[
+        'fire', 
+        'numpy',
+        'matplotlib', 
+        'pandas', 
+        'tqdm', 
+        'scikit-image', 
+        'scikit-learn', 
+        'scipy', 
+        'tensorboardx',
+        'torch',
+        'torchvision'
+        ],
+    long_description_content_type="text/markdown",
     packages=find_packages(),
-    zip_safe=True
+    zip_safe=True,
+    classifiers=[
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3 :: Only"
+    ]
 )
