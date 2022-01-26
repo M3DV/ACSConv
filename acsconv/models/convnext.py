@@ -1,12 +1,4 @@
-# This code is adapted from https://github.com/facebookresearch/ConvNeXt/blob/main/models/convnext.py
-
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-
-# All rights reserved.
-
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-
+# This code is modified from https://github.com/facebookresearch/ConvNeXt/blob/main/models/convnext.py
 
 import torch
 import torch.nn as nn
@@ -57,8 +49,6 @@ class LayerNorm(nn.Module):
 
 
 class Block(nn.Module):
-    
-
     r""" modified into 3D.
     ConvNeXt Block. There are two equivalent implementations:
     (1) DwConv -> LayerNorm (channels_first) -> 1x1x1 Conv -> GELU -> 1x1x1 Conv; all in (N, C, D, H, W)
