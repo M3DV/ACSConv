@@ -5,8 +5,9 @@ Reinventing 2D Convolutions for 3D Images ([arXiv](https://arxiv.org/abs/1911.10
 IEEE Journal of Biomedical and Health Informatics (IEEE JBHI), 2021 ([DOI](http://doi.org/10.1109/JBHI.2021.3049452))
 
 **News**:
+- 2022.01.26 - ACS [ConvNeXt](acsconv/models/convnext.py) supported.
 - 2021.12.17 - torch 1.10 supported & pip installation supported.
-- 2021.4.19 - torch 1.8 supported
+- 2021.4.19 - torch 1.8 supported.
 
 ## Key contributions
 

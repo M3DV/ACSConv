@@ -1,10 +1,8 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torch.nn import init
 
 import math
-from collections import OrderedDict
 
 from ..utils import _to_triple, _triple_same, _pair_same
 

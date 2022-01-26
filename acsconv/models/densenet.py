@@ -5,7 +5,6 @@ Difference from densenet in torchvision for higher resolution:
 2. Remove the first max-pooling layer
 """
 
-import re
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

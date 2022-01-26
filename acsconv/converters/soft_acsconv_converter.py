@@ -1,4 +1,3 @@
-import torch.nn as nn
 from .base_converter import BaseConverter
 from ..operators import SoftACSConv
 
