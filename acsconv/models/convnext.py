@@ -5,6 +5,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from timm.models.layers import trunc_normal_, DropPath
 
+# suggested by this [issue](https://github.com/facebookresearch/ConvNeXt/issues/37) (not compared on ACS)
+import torch.backends.cudnn as cudnn
+cudnn.benchmark = True
+
 from ..operators import ACSConv
 
 model_urls = {
