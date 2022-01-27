@@ -15,7 +15,8 @@ def conv3D_output_shape_f(i, input_shape, kernel_size, dilation, padding, stride
 
 def acs_conv_f(x, weight, bias, kernel_size, dilation, padding, stride, groups, out_channels, acs_kernel_split):
     B, C_in, *input_shape = x.shape
-    assert groups==1 or groups==C_in, "only support standard or depthwise conv"
+    C_out = weight.shape[0]
+    assert groups==1 or groups==C_in==C_out, "only support standard or depthwise conv"
 
     conv3D_output_shape = (conv3D_output_shape_f(0, input_shape, kernel_size, dilation, padding, stride), 
                             conv3D_output_shape_f(1, input_shape, kernel_size, dilation, padding, stride), 
@@ -24,7 +25,8 @@ def acs_conv_f(x, weight, bias, kernel_size, dilation, padding, stride, groups, 
     weight_a = weight[0:acs_kernel_split[0]].unsqueeze(2)
     weight_c = weight[acs_kernel_split[0]:(acs_kernel_split[0]+acs_kernel_split[1])].unsqueeze(3)
     weight_s = weight[(acs_kernel_split[0]+acs_kernel_split[1]):].unsqueeze(4)
-    if groups==C_in:
+    if groups==C_in==C_out:
+        # depth-wise
         x_a = x[:, 0:acs_kernel_split[0]]
         x_c = x[:, acs_kernel_split[0]:(acs_kernel_split[0]+acs_kernel_split[1])]
         x_s = x[:, (acs_kernel_split[0]+acs_kernel_split[1]):]
@@ -32,6 +34,7 @@ def acs_conv_f(x, weight, bias, kernel_size, dilation, padding, stride, groups, 
         group_c = acs_kernel_split[1]
         group_s = acs_kernel_split[2]
     else:
+        # groups=1
         x_a = x_c = x_s = x
         group_a = group_c = group_s = 1
 

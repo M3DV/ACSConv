@@ -1,4 +1,11 @@
+'''
+If you want to test the validity of pip installation, please move this file outside of the git project directory, 
+otherwise it is testing the files inside the project instead of pip installation.
+'''
+
+
 import torch
+
 
 '''
 test the operators
@@ -11,6 +18,13 @@ conv = ACSConv(in_channels=3, out_channels=10, kernel_size=3, padding=1)
 out = conv(x)
 # SoftACSConv to process 3D volumnes
 conv = SoftACSConv(in_channels=3, out_channels=10, kernel_size=3, padding=1)
+out = conv(x)
+
+'''
+test the operators (depth-wise)
+'''
+# Depth-wise ACSConv to process 3D volumnes
+conv = ACSConv(in_channels=3, out_channels=3, kernel_size=3, padding=1, groups=3)
 out = conv(x)
 
 '''

@@ -29,7 +29,7 @@ pip install ACSConv
 B) Simply copy and paste it in your project;
 
 
-You could run the `test.py` to validate the installation.
+You could run the `test.py` to validate the installation. (If you want to test the validity of pip installation, please move this `test.py` file outside of this git project directory, otherwise it is testing the code inside the project instead of pip installation.)
 
 ## Requirements
 ### PyTorch requirements
