@@ -25,6 +25,10 @@ A) Install ACSConv as a standard Python package from PyPI:
 ```bash
 pip install ACSConv
 ```
+Alternatively, via conda:
+```bash
+conda install acsconv
+```
 
 B) Simply copy and paste it in your project;
 
