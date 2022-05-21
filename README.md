@@ -27,7 +27,7 @@ pip install ACSConv
 ```
 Alternatively, via conda:
 ```bash
-conda install acsconv
+conda install acsconv -c conda-forge
 ```
 
 B) Simply copy and paste it in your project;
