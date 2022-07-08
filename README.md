@@ -36,13 +36,12 @@ B) Simply copy and paste it in your project;
 You could run the `test.py` to validate the installation. (If you want to test the validity of pip installation, please move this `test.py` file outside of this git project directory, otherwise it is testing the code inside the project instead of pip installation.)
 
 ## Requirements
-### PyTorch requirements
+### Recommended [PyTorch](https://pytorch.org/docs/stable/index.html) versions
 
 ```python
 torch>=1.0.0 and torch<=1.10.0
 ```
-
-You can install it on the [official homepage](https://pytorch.org/docs/stable/index.html).
+Compatibility of other PyTorch versions are not guaranteed. They should be compatible if the relevant APIs are consistent. Feel free to try.
 
 ### Other requirements
 
