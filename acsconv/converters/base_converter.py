@@ -40,7 +40,8 @@ class BaseConverter(object):
                     kwargs = {k: getattr(child, k) for k in arguments}
                     if 'adaptive' in child.__class__.__name__.lower():
                         for k in kwargs.keys():
-                            kwargs[k] = _triple_same(kwargs[k])
+                            if not isinstance(kwargs[k], bool):
+                                kwargs[k] = _triple_same(kwargs[k])
                     setattr(module, child_name, TargetClass(**kwargs))
                 else:
                     raise Exception('No corresponding module in 3D for 2d module {}'.format(child.__class__.__name__))
